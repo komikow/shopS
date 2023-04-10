@@ -1,0 +1,20 @@
+#SPRING CONFIGURATION
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shopS
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: Qwety5
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+#SERVICE CONFIGURATION
+services:
+  mail:
+    email: komikow@mail.ru
+    users: komikow, komikow2, komikow3
+    password: Qwety5
