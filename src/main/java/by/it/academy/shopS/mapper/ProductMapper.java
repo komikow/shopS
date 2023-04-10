@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ProductMapper {
     public ProductResponse buildProductResponse(Product product) {
         return ProductResponse.builder()
-                .product_id(product.getProduct_id())
+                .id(product.getId())
                 .model(product.getModel())
                 .specifications(product.getSpecifications())
                 .guarantee(product.getGuarantee())

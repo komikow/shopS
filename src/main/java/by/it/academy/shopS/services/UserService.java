@@ -9,9 +9,13 @@ import java.util.List;
 public interface UserService {
     UserResponse getUser(int id);
 
+    void deleteUser(String login);
+
     List<UserResponse> getUsersByLoginAndPassword(String login, String password) throws Exception;
 
     List<UserResponse> getUsers(Pageable pageable);
 
     UserResponse createUser(UserRequest userRequest) throws Exception;
+
+    UserResponse userUpdatePassword(int id, String password);
 }

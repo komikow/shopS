@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(String login) {
+        userRepository.deleteUserByLogin(login);
+    }
+
+    @Override
     public List<UserResponse> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable).stream()
                 .map(userMapper::buildUserResponse)
@@ -37,12 +42,13 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getUsersByLoginAndPassword(String login, String password) throws Exception {
         List<UserResponse> userResponseList = new ArrayList<>();
         for (User users : userRepository.findAll()) {
-            if (users.getLogin().equals("komikow") && users.getPassword().equals("Qwety5")) {
+            if (login.equals("komikow") && password.equals("Qwety5")) {
+                System.out.println("login = " + login + ", passw = " + password);
                 List<UserResponse> collect = userRepository.findAll().stream()
                         .map(userMapper::buildUserResponse)
                         .collect(Collectors.toList());
                 userResponseList = collect;
-                break;
+                return userResponseList;
             } else {
                 throw new Exception("Login and password is not valid");
             }
@@ -70,5 +76,12 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userResponse;
+    }
+
+    @Override
+    public UserResponse userUpdatePassword(int id, String password) {
+        User userById = userRepository.findUserById(id);
+        userById.setPassword(password);
+        return userMapper.buildUserResponse(userById);
     }
 }
