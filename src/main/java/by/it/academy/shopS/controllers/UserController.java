@@ -5,7 +5,6 @@ import by.it.academy.shopS.dto.UserResponse;
 import by.it.academy.shopS.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,34 +18,27 @@ public class UserController {
     private final UserService userServiceImpl;
 
     @GetMapping("{id}")
-    public UserResponse getUser(@PathVariable int id) {
+    public UserResponse getUser(@PathVariable Long id) {
         return userServiceImpl.getUser(id);
     }
 
-    @PostMapping("delete/{login}")
-    @Transactional
-    public void deleteUser(@PathVariable String login) {
-        userServiceImpl.deleteUser(login);
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userServiceImpl.deleteUser(id);
     }
 
     @GetMapping
-    public List<UserResponse> getUsersByCondition(Pageable pageable) {
+    public List<UserResponse> getUsers(Pageable pageable) {
         return userServiceImpl.getUsers(pageable);
     }
 
-    @GetMapping("valid/{login}/{password}")
-    public List<UserResponse> getUsersByCondition(@PathVariable String login, @PathVariable String password) throws Exception {
-        return userServiceImpl.getUsersByLoginAndPassword(login, password);
-    }
-
     @PostMapping
-    public UserResponse createUser(@Validated @RequestBody UserRequest userRequest) throws Exception {
+    public UserResponse createUser(@Validated @RequestBody UserRequest userRequest) {
         return userServiceImpl.createUser(userRequest);
     }
 
-    @PostMapping("update/{id}/{password}")
-    @Transactional
-    public UserResponse userUpdatePassword(@PathVariable int id, @PathVariable String password) {
-        return userServiceImpl.userUpdatePassword(id, password);
+    @PatchMapping("{id}/{email}")
+    public UserResponse userUpdateEmail(@PathVariable Long id, @PathVariable String email) {
+        return userServiceImpl.userUpdateEmail(id, email);
     }
 }

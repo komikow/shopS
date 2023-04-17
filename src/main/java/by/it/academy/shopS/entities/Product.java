@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -15,22 +16,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Product {
     @Id
-    @Column(name = "\"PRODUCT_ID\"", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "\"MODEL\"", nullable = false, length = 100)
+    @Column(name = "MODEL", nullable = false, length = 100)
     private String model;
 
-    @Column(name = "\"SPECIFICATIONS\"", nullable = false, length = 300)
+    @Column(name = "SPECIFICATIONS", nullable = false, length = 200)
     private String specifications;
 
-    @Column(name = "\"GUARANTEE\"", nullable = false, length = 10)
-    private int guarantee;
+    @Column(name = "GUARANTEE", nullable = false, length = 100)
+    private Integer monthsWarranty;
 
-    @Column(name = "\"PRICE\"", nullable = false, length = 100)
-    private int price;
+    @Column(name = "PRICE", nullable = false)
+    private BigDecimal price;
 
-    @Column(name = "\"QUANTITY\"", nullable = false, length = 100)
-    private int quantity;
+    @Column(name = "QUANTITY", nullable = false, length = 100)
+    private Integer quantity;
 }

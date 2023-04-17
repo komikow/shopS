@@ -3,13 +3,15 @@ package by.it.academy.shopS.services;
 import by.it.academy.shopS.dto.UserRequest;
 import by.it.academy.shopS.dto.UserResponse;
 import by.it.academy.shopS.entities.User;
+import by.it.academy.shopS.exceptions.UserNotFoundException;
 import by.it.academy.shopS.mapper.UserMapper;
 import by.it.academy.shopS.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,15 +22,16 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponse getUser(int id) {
+    public UserResponse getUser(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::buildUserResponse)
-                .orElseThrow(() -> new RuntimeException(String.format("Can't find user with id %s", id)));
+                .orElseThrow(() -> new UserNotFoundException(String.format("Can't find user with id %s", id)));
     }
 
     @Override
-    public void deleteUser(String login) {
-        userRepository.deleteUserByLogin(login);
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -39,49 +42,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getUsersByLoginAndPassword(String login, String password) throws Exception {
-        List<UserResponse> userResponseList = new ArrayList<>();
-        for (User users : userRepository.findAll()) {
-            if (login.equals("komikow") && password.equals("Qwety5")) {
-                System.out.println("login = " + login + ", passw = " + password);
-                List<UserResponse> collect = userRepository.findAll().stream()
-                        .map(userMapper::buildUserResponse)
-                        .collect(Collectors.toList());
-                userResponseList = collect;
-                return userResponseList;
-            } else {
-                throw new Exception("Login and password is not valid");
-            }
-        }
-        return userResponseList;
+    public UserResponse createUser(UserRequest userRequest) {
+        User user = userMapper.buildUser(userRequest);
+        return userMapper.buildUserResponse(userRepository.save(user));
     }
 
     @Override
-    public UserResponse createUser(UserRequest userRequest) throws Exception {
-        UserResponse userResponse = null;
-        if (userRepository.findAll().isEmpty()) {
-            User user = userMapper.buildUser(userRequest);
-            User savedUser = userRepository.save(user);
-            return userMapper.buildUserResponse(savedUser);
-        } else {
-            for (User users : userRepository.findAll()) {
-                if (userRequest.getLogin().equals(users.getLogin())) {
-                    throw new Exception("Is not valid");
-                } else {
-                    User user = userMapper.buildUser(userRequest);
-                    User savedUser = userRepository.save(user);
-                    userResponse = userMapper.buildUserResponse(savedUser);
-                    break;
-                }
-            }
-        }
-        return userResponse;
-    }
-
-    @Override
-    public UserResponse userUpdatePassword(int id, String password) {
-        User userById = userRepository.findUserById(id);
-        userById.setPassword(password);
-        return userMapper.buildUserResponse(userById);
+    public UserResponse userUpdateEmail(Long id, String email) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find user with id %s"));
+        user.setEmail(email);
+        userRepository.save(user);
+        return userMapper.buildUserResponse(user);
     }
 }

@@ -8,17 +8,18 @@ import by.it.academy.shopS.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
+    private final ProductMapper productMapper;
 
     private final ProductRepository productRepository;
-
-    private final ProductMapper productMapper;
 
     @Override
     public List<ProductResponse> getProducts(Pageable pageable) {
@@ -28,21 +29,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(int id) {
-        productRepository.deleteProductById(id);
+    @Transactional
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public ProductResponse productUpdateGuaranteePeriod(Long id, Integer monthsWarranty) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Can't find user with id %s", id)));
+        product.setMonthsWarranty(monthsWarranty);
+        productRepository.save(product);
+        return productMapper.buildProductResponse(product);
     }
 
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = productMapper.buildProduct(productRequest);
-        Product savedProduct = productRepository.save(product);
-        return productMapper.buildProductResponse(savedProduct);
-    }
-
-    @Override
-    public ProductResponse productUpdateGuarantee(int id, int price) {
-        Product productById = productRepository.findProductById(id);
-        productById.setPrice(price);
-        return productMapper.buildProductResponse(productById);
+        productRepository.save(product);
+        return productMapper.buildProductResponse(product);
     }
 }

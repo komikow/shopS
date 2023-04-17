@@ -3,7 +3,8 @@ package by.it.academy.shopS.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -12,10 +13,10 @@ public class ProductRequest {
     private String model;
     @NotBlank
     private String specifications;
-    @NotBlank
-    private int guarantee;
-    @NotBlank
-    private int price;
-    @NotBlank
-    private int quantity;
+    @NotNull
+    private Integer monthsWarranty;
+    @NotNull
+    private BigDecimal price;
+    @NotNull
+    private Integer quantity;
 }

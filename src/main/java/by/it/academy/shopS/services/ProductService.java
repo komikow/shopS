@@ -10,9 +10,9 @@ public interface ProductService {
 
     List<ProductResponse> getProducts(Pageable pageable);
 
-    void deleteProduct(int id);
+    void deleteProduct(Long id);
 
-    ProductResponse productUpdateGuarantee(int id, int price);
+    ProductResponse productUpdateGuaranteePeriod(Long id, Integer monthsWarranty);
 
     ProductResponse createProduct(ProductRequest productRequest);
 }

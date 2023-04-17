@@ -5,6 +5,9 @@ import by.it.academy.shopS.dto.UserResponse;
 import by.it.academy.shopS.entities.User;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 @Component
 public class UserMapper {
     public UserResponse buildUserResponse(User user) {
@@ -15,6 +18,7 @@ public class UserMapper {
                 .age(user.getAge())
                 .login(user.getLogin())
                 .password(user.getPassword())
+                .email(user.getEmail())
                 .build();
     }
 
@@ -22,9 +26,14 @@ public class UserMapper {
         return User.builder()
                 .firstName(userRequest.getFirstName())
                 .secondName(userRequest.getSecondName())
-                .age(userRequest.getAge())
+                .age(convertToAge(userRequest.getBirthDate()))
                 .login(userRequest.getLogin())
                 .password(userRequest.getPassword())
+                .email(userRequest.getEmail())
                 .build();
+    }
+
+    private Integer convertToAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 }

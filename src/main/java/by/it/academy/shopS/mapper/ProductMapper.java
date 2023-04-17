@@ -12,7 +12,7 @@ public class ProductMapper {
                 .id(product.getId())
                 .model(product.getModel())
                 .specifications(product.getSpecifications())
-                .guarantee(product.getGuarantee())
+                .guarantee(product.getMonthsWarranty())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
                 .build();
@@ -22,7 +22,7 @@ public class ProductMapper {
         return Product.builder()
                 .model(productRequest.getModel())
                 .specifications(productRequest.getSpecifications())
-                .guarantee(productRequest.getGuarantee())
+                .monthsWarranty(productRequest.getMonthsWarranty())
                 .price(productRequest.getPrice())
                 .quantity(productRequest.getQuantity())
                 .build();

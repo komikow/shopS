@@ -15,9 +15,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class User {
     @Id
-    @Column(name = "\"USER_ID\"", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "FIRST_NAME", nullable = false, length = 100)
     private String firstName;
@@ -26,11 +25,14 @@ public class User {
     private String secondName;
 
     @Column(name = "AGE", nullable = false)
-    private int age;
+    private Integer age;
 
     @Column(name = "LOGIN", unique = true, nullable = false, length = 100)
     private String login;
 
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
+
+    @Column(name = "EMAIL", nullable = false, length = 20)
+    private String email;
 }

@@ -5,7 +5,6 @@ import by.it.academy.shopS.dto.ProductResponse;
 import by.it.academy.shopS.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +21,8 @@ public class ProductController {
         return productServiceImpl.getProducts(pageable);
     }
 
-    @PostMapping("delete/{id}")
-    @Transactional
-    public void deleteProduct(@PathVariable int id) {
+    @DeleteMapping("{id}")
+    public void deleteProduct(@PathVariable Long id) {
         productServiceImpl.deleteProduct(id);
     }
 
@@ -33,9 +31,8 @@ public class ProductController {
         return productServiceImpl.createProduct(productRequest);
     }
 
-    @PostMapping("update/{id}/{price}")
-    @Transactional
-    public ProductResponse productUpdateGuarantee(@PathVariable int id, @PathVariable int price) {
-        return productServiceImpl.productUpdateGuarantee(id, price);
+    @PatchMapping("{id}/{monthsWarranty}")
+    public ProductResponse productUpdateGuaranteePeriod(@PathVariable Long id, @PathVariable Integer monthsWarranty) {
+        return productServiceImpl.productUpdateGuaranteePeriod(id, monthsWarranty);
     }
 }

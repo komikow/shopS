@@ -1,5 +1,7 @@
 #SPRING CONFIGURATION
 spring:
+  application:
+    name: shopS
   datasource:
     url: jdbc:postgresql://localhost:5432/shopS
     driver-class-name: org.postgresql.Driver
@@ -12,9 +14,27 @@ spring:
     generate-ddl: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+server:
+  port: 8080
+  error:
+    include-message: always
+
 #SERVICE CONFIGURATION
 services:
   mail:
     email: komikow@mail.ru
-    users: komikow, komikow2, komikow3
-    password: Qwety5
+    #    username: Sergey
+    username: komikow, komikow2, komikow3
+    password: 123321
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://193.158.58.51:5432/shopS
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: otherPassword
